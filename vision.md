@@ -6,7 +6,7 @@ Linux Post Office is a small, friendly command-line learning game. It turns Linu
 
 ## Player promise
 
-The game should make a beginner feel that Linux commands are useful, memorable, and approachable. Every completed letter gives immediate feedback, a plain-language explanation, XP, and visible progress through a themed post-office route.
+The game should make a beginner feel that Linux commands are useful, memorable, and approachable. Every completed letter gives immediate feedback, a plain-language explanation, XP, and visible progress along a postal-van delivery route.
 
 ## Current experience
 
@@ -17,14 +17,14 @@ Players work through four unlocked-in-sequence learning levels:
 3. **Special Delivery** — searching and permissions: `grep`, `chmod`
 4. **Night Route** — processes: `ps`, `kill`
 
-For each letter, players can enter the post office, talk to the postmaster, read the mission, optionally walk to the destination, and submit a Linux command. A correct answer opens the letter, awards 50 XP, advances the level, and unlocks the next phase when all letters in a level are complete.
+The Level 1 post office is the player's permanent home base for every level. For each letter, players can enter the post office, talk to the postmaster, read the mission, optionally drive toward the destination, and submit a Linux command. A postal van travels from the left toward the post office and shows Mail Adventure progress. A correct answer opens the letter, awards 50 XP, advances the level, and unlocks the next phase when all letters in a level are complete.
 
 ## Design principles
 
 - **Learn by doing:** Command prompts are short, concrete tasks rather than definitions to memorize.
 - **Use a clear metaphor:** The post office, letters, postmaster, and destinations provide a playful reason for each command.
 - **Give immediate guidance:** Incorrect answers stay non-punitive and include a contextual hint; correct answers explain the command.
-- **Show momentum:** Letter state, XP, level progress, map nodes, and visual scene changes make progression visible.
+- **Show momentum:** Letter state, XP, level progress, and the postal van's route make progression visible.
 - **Support return visits:** Progress and terminal logs are stored in browser `localStorage`; reached levels remain selectable and completed levels can be replayed.
 
 ## Current boundaries

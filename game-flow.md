@@ -7,7 +7,7 @@ flowchart TD
     A[Load game] --> B{Saved localStorage state?}
     B -- No --> C[Reset: Level 1, first letter, 0 XP]
     B -- Yes --> D[Restore level, letter index, XP, log, and progress]
-    C --> E[Render dashboard, map, mission, letters, terminal]
+    C --> E[Render dashboard, Level 1 home-base scene, mission, letters, terminal]
     D --> E
 
     E --> F[Choose current or previously reached level]
@@ -32,7 +32,8 @@ flowchart TD
     R --> J
     Q -- Yes --> S[Log success and command explanation]
     S --> T[Add 50 XP and mark letter delivered]
-    T --> U{Last letter in level?}
+    T --> VAN[Move postal van toward the post office on the embedded Mail Adventure route]
+    VAN --> U{Last letter in level?}
     U -- No --> V[Advance to next letter]
     V --> W[Save to localStorage and render]
     W --> J
