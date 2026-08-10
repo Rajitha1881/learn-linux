@@ -1,0 +1,327 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Linux Post Office</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef3f7;color:#24313d;font-family:Inter,system-ui,sans-serif}.app{max-width:1180px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #d9e1e8;border-radius:18px;padding:16px 20px;box-shadow:0 8px 30px #22334412}
+.logo{font-size:25px}.brand{display:flex;gap:12px;align-items:center}.brand h1{margin:0;font-size:21px}.brand p{margin:3px 0 0;color:#7a8794;font-size:12px}
+.badges{display:flex;gap:8px}.badge{background:#f5f8fa;border:1px solid #dce4ea;border-radius:10px;padding:8px 11px;font-size:11px}.badge b{display:block;font-size:15px;color:#253544}
+.layout{display:grid;grid-template-columns:1.5fr .8fr;gap:15px;margin-top:15px}.card{background:#fff;border:1px solid #d9e1e8;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px #2233440d}
+.street{height:410px;position:relative;background:linear-gradient(#bfe0ef 0 46%,#d9c6a2 46% 100%);overflow:hidden}.cloud{position:absolute;color:#fff;font-size:42px;opacity:.7}.c1{left:12%;top:12%}.c2{right:16%;top:8%}
+.road{position:absolute;left:0;right:0;bottom:0;height:37%;background:#777d80}.road:after{content:"";position:absolute;left:0;right:0;top:50%;border-top:7px dashed #f4e9a6}
+.postoffice{position:absolute;right:10%;top:23%;width:255px;height:165px;background:#f7e5c7;border:3px solid #a85d35;border-radius:9px;box-shadow:0 10px 18px #0002}.roof{position:absolute;left:-15px;right:-15px;top:-25px;height:28px;background:#9a4f31;clip-path:polygon(0 100%,8% 0,92% 0,100% 100%)}.sign{position:absolute;top:25px;left:28px;right:28px;text-align:center;background:#fff;border:2px solid #c36d3e;padding:7px;font-weight:800;color:#9a4f31}.door{position:absolute;bottom:0;left:98px;width:55px;height:74px;background:#6e4a3a;border:4px solid #4d352a;border-bottom:0}.window{position:absolute;top:74px;width:42px;height:38px;background:#aee2ef;border:4px solid #6d4c3c}.w1{left:23px}.w2{right:23px}.postman{position:absolute;left:18%;bottom:14%;font-size:60px;transition:.6s}.mailbox{position:absolute;left:52%;bottom:23%;font-size:45px}.letter{position:absolute;right:15%;top:54%;font-size:34px;cursor:pointer;transition:.3s}.letter:hover{transform:scale(1.15) rotate(-4deg)}
+.panel{padding:17px}.panel h2{margin:0 0 12px;font-size:15px}.level{display:flex;align-items:center;gap:10px;margin-bottom:12px}.levelicon{width:42px;height:42px;border-radius:12px;background:#fff3d5;border:1px solid #ead29a;display:grid;place-items:center}.progress{height:7px;background:#e8edf1;border-radius:99px;overflow:hidden;margin-top:7px}.bar{height:100%;background:#4c9b6b;width:0;transition:.4s}.mission{background:#f7fafc;border:1px solid #dce5eb;border-radius:12px;padding:12px;margin-bottom:12px}.mission small{color:#748493}.mission b{display:block;margin:4px 0}.mission span{font-size:11px;color:#687988;line-height:1.45}
+.terminal{background:#111820;color:#dce8ef;border-radius:13px;overflow:hidden}.termhead{padding:9px 12px;background:#19232d;color:#8fa1af;font:10px monospace}.output{height:145px;padding:12px;font:12px/1.6 monospace;overflow:auto}.green{color:#73d69a}.yellow{color:#f1cb70}.red{color:#ff7d7d}.input{display:flex;gap:7px;padding:10px;border-top:1px solid #2b3945}.input span{color:#73d69a;font:12px monospace}.input input{flex:1;background:transparent;border:0;outline:0;color:#fff;font:12px monospace}.input button,button{border:1px solid #c9d5de;background:#fff;border-radius:9px;padding:8px 11px;cursor:pointer;font-size:11px}.input button{background:#3d8d61;color:white;border-color:#3d8d61}
+.deck{display:grid;grid-template-columns:1fr 1fr;gap:7px}.cmd{border:1px solid #dbe3e8;border-radius:9px;padding:9px;background:#fbfcfd;cursor:pointer}.cmd code{font-size:11px;color:#356d4e}.cmd small{display:block;color:#83919d;font-size:9px;margin-top:3px}.letters{display:grid;gap:9px}.envelope{border:1px solid #dce3e8;border-radius:11px;padding:11px;background:#fffdf8;position:relative}.envelope.locked{opacity:.48}.envelope b{font-size:11px}.envelope small{display:block;color:#7d8b96;margin-top:4px;font-size:10px}.lock{float:right}.lesson{font-size:11px;line-height:1.55;color:#6d7c89}.modal{position:fixed;inset:0;background:#17232e88;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{max-width:470px;width:100%;background:#fff;border-radius:16px;padding:20px;border:1px solid #d5dfe6}.modalbox h2{margin-top:0}.modalbox p{font-size:12px;line-height:1.6;color:#657582}.modalbox button{background:#3d8d61;color:#fff;border-color:#3d8d61}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.street{height:340px}.postoffice{transform:scale(.8);transform-origin:right top}.postman{left:8%}}
+
+.learning-levels{padding:13px 16px}.learning-levels button{min-width:150px;text-align:left}.learning-levels button.active{background:#3d8d61;color:#fff;border-color:#3d8d61}.learning-levels button:disabled{cursor:not-allowed;opacity:.5}
+.scene-controls{display:flex;gap:7px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid #dbe3e8;background:#fbfcfd}
+.scene-controls button.active{background:#3d8d61;color:#fff;border-color:#3d8d61}
+.postoffice-state{position:absolute;left:14px;top:14px;background:#ffffffdd;border:1px solid #d6e0e6;border-radius:10px;padding:8px 10px;font-size:10px;z-index:4;box-shadow:0 4px 12px #22334418}
+.postoffice-state b{display:block;font-size:12px}
+.scene-message{position:absolute;left:50%;top:15px;transform:translateX(-50%);background:#fff;border:1px solid #d8e1e7;border-radius:12px;padding:9px 13px;font-size:11px;z-index:5;box-shadow:0 5px 15px #22334418;max-width:360px;text-align:center}
+.inside-room{display:none;position:absolute;inset:0;background:linear-gradient(#eadfcf 0 58%,#b78b62 58%);z-index:3}
+.inside-room.show{display:block}
+.inside-sign{position:absolute;top:18px;left:50%;transform:translateX(-50%);background:#fff7e9;border:2px solid #b86c40;padding:9px 18px;border-radius:8px;font-weight:800;color:#8f4d31}
+.counter{position:absolute;left:9%;right:9%;bottom:19%;height:80px;background:#8d5a3e;border:4px solid #70442f;border-radius:8px}
+.postmaster{position:absolute;left:43%;bottom:30%;font-size:62px}
+.mail-stack{position:absolute;right:17%;bottom:25%;font-size:48px}
+.letter-card{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:280px;background:#fffdf6;border:2px solid #c9a66b;border-radius:9px;padding:18px;z-index:8;box-shadow:0 15px 40px #0004}
+.letter-card.show{display:block}
+.letter-card h3{margin:0 0 7px;color:#8d4f32}.letter-card p{font-size:11px;line-height:1.55;color:#5e6d78}.letter-seal{font-size:27px;text-align:center}
+.destination{display:none;position:absolute;inset:0;background:linear-gradient(#c8e4ef 0 48%,#d2bd91 48%);z-index:2}
+.destination.show{display:block}
+.dest-building{position:absolute;left:50%;top:29%;transform:translateX(-50%);width:280px;height:145px;background:#d8d0bd;border:3px solid #766b5d;border-radius:8px}
+.dest-building:before{content:"LINUX DESTINATION";position:absolute;top:20px;left:25px;right:25px;text-align:center;background:#fff;border:2px solid #7f7466;padding:7px;font-weight:800;font-size:12px}
+.dest-door{position:absolute;bottom:0;left:112px;width:52px;height:72px;background:#55483f}
+.level-stamp{position:absolute;right:14px;top:14px;background:#24313d;color:#fff;border-radius:10px;padding:7px 10px;font-size:10px;z-index:4}
+
+.street[data-level="2"] .postoffice{filter:saturate(1.12);transform:translateY(3px)}
+.street[data-level="3"] .postoffice{filter:brightness(.78) saturate(1.2)}
+.street[data-level="4"] .postoffice{filter:brightness(.62) saturate(1.15)}
+.street[data-level="2"] .mailbox{transform:rotate(-3deg)}
+.street[data-level="3"] .mailbox{filter:drop-shadow(0 0 8px #f1cb70)}
+.street[data-level="4"] .mailbox{filter:drop-shadow(0 0 10px #74a9ff)}
+.street[data-level="3"] .road:after{border-color:#f1cb70}
+.street[data-level="4"] .road:after{border-color:#74a9ff}
+
+.arcade{margin-top:15px;padding:14px;background:#fff;border:1px solid #d9e1e8;border-radius:18px;box-shadow:0 8px 30px #2233440d}
+.arcade-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.arcade-head h2{margin:0;font-size:15px}.phase-progress{flex:1;max-width:420px}
+.phase-progress .track{height:13px;background:#e6ebef;border:1px solid #ccd7de;border-radius:99px;overflow:hidden}
+.phase-progress .fill{height:100%;width:0;background:linear-gradient(90deg,#4c9b6b,#75c98e);transition:width .55s cubic-bezier(.2,.8,.2,1)}
+.phase-progress small{display:block;text-align:right;color:#71808c;font-size:9px;margin-top:3px}
+.world-map{position:relative;height:145px;border-radius:14px;overflow:hidden;background:linear-gradient(#a9d9ee 0 62%,#79b85f 62% 100%);border:1px solid #bdd2dc}
+.map-cloud{position:absolute;color:white;opacity:.75;font-size:30px}.mc1{left:7%;top:13%}.mc2{left:46%;top:8%}.mc3{right:8%;top:17%}
+.map-ground{position:absolute;bottom:0;left:0;right:0;height:48px;background:repeating-linear-gradient(90deg,#72a957 0 38px,#7db460 38px 76px);border-top:4px solid #548844}
+.map-road{position:absolute;left:4%;right:4%;bottom:37px;height:5px;background:#eee0a5;border-radius:4px}
+.map-node{position:absolute;bottom:48px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #5d8d68;box-shadow:0 5px 10px #22334433;font-size:22px;cursor:pointer;transition:.2s}
+.map-node:hover{transform:translateX(-50%) scale(1.08)}.map-node.locked{filter:grayscale(1);opacity:.5;cursor:not-allowed}.map-node.current{border-color:#e4a83d;box-shadow:0 0 0 5px #e4a83d33,0 5px 10px #22334433}
+.map-node small{position:absolute;top:57px;white-space:nowrap;font-size:9px;color:#34434f;font-weight:700}
+.coins{color:#c38a17;font-weight:800}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="logo">📮</div><div><h1>Linux Post Office</h1><p>Deliver every letter by mastering the Linux command it contains.</p></div></div><div class="badges"><div class="badge">LEVEL<b id="lvl">1</b></div><div class="badge">XP<b id="xp">0</b></div><div class="badge">DELIVERED<b id="done">0</b></div></div></header>
+
+<div class="card panel learning-levels" style="margin-bottom:15px">
+  <h2 style="margin-bottom:10px">🗺️ Learning Levels</h2>
+  <div id="levelButtons" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+</div>
+<section class="arcade">
+  <div class="arcade-head">
+    <h2>🗺️ Linux Mail Adventure</h2>
+    <div class="phase-progress">
+      <div class="track"><div class="fill" id="phaseFill"></div></div>
+      <small id="phasePercent">0% complete</small>
+    </div>
+  </div>
+  <div class="world-map">
+    <div class="map-cloud mc1">☁️</div><div class="map-cloud mc2">☁️</div><div class="map-cloud mc3">☁️</div>
+    <div class="map-ground"></div><div class="map-road"></div>
+    <div class="map-node" id="node1" style="left:12%" onclick="selectLevel(0)">📮<small>Level 1</small></div>
+    <div class="map-node locked" id="node2" style="left:37%" onclick="selectLevel(1)">📦<small>Level 2</small></div>
+    <div class="map-node locked" id="node3" style="left:62%" onclick="selectLevel(2)">🔎<small>Level 3</small></div>
+    <div class="map-node locked" id="node4" style="left:87%" onclick="selectLevel(3)">🌙<small>Level 4</small></div>
+  </div>
+</section>
+<div class="layout">
+<main>
+<div class="card street" id="world">
+<div class="cloud c1">☁</div><div class="cloud c2">☁</div>
+<div class="postoffice"><div class="roof"></div><div class="sign">POST OFFICE<br><small>LINUX DISTRICT</small></div><div class="window w1"></div><div class="window w2"></div><div class="door"></div></div>
+<div class="mailbox">📬</div><div class="letter" onclick="openLetter()">✉️</div><div class="postman" id="postman">🧑‍✉️</div><div class="road"></div>
+<div class="postoffice-state"><b id="officeStatus">Level 1 Post Office</b><span id="officeDetail">Morning route · 3 easy letters</span></div>
+<div class="level-stamp" id="levelStamp">LEVEL 1</div>
+<div class="scene-message" id="sceneMessage">Click the post office door to walk inside.</div>
+<div class="inside-room" id="insideRoom">
+  <div class="inside-sign">📮 POSTMASTER'S COUNTER</div>
+  <div class="counter"></div>
+  <div class="postmaster">🧑‍💼</div>
+  <div class="mail-stack">✉️📨</div>
+</div>
+<div class="destination" id="destination">
+  <div class="dest-building"><div class="dest-door"></div></div>
+</div>
+<div class="letter-card" id="letterCard">
+  <div class="letter-seal">✉️</div>
+  <h3 id="physicalLetterTitle">Letter</h3>
+  <p id="physicalLetterText"></p>
+  <button onclick="closePhysicalLetter()">Put letter on desk</button>
+</div>
+</div>
+
+<div class="card panel">
+<div class="level"><div class="levelicon">⭐</div><div style="flex:1"><b id="levelTitle">Level 1 — Morning Mail</b><div class="progress"><div class="bar" id="bar"></div></div></div></div>
+<div class="mission"><small id="missionLabel">LETTER 1</small><b id="missionTitle">A letter is waiting at the counter</b><span id="missionText">The postmaster will only hand you the letter after you prove you know the correct Linux command.</span></div>
+<div class="scene-controls">
+<button id="outsideBtn" class="active" onclick="setScene('outside')">🚶 Outside</button>
+<button id="insideBtn" onclick="setScene('inside')">🚪 Enter Post Office</button>
+<button id="talkBtn" onclick="talkToPostmaster()">💬 Talk to Postmaster</button>
+<button id="deliverBtn" onclick="walkToDestination()">🚚 Deliver Letter</button>
+</div>
+<div class="terminal"><div class="termhead">postmaster@linux-post-office:~/counter</div><div class="output" id="out"></div><div class="input"><span>postman$</span><input id="cmd" placeholder="Type the Linux command..." autocomplete="off"><button onclick="run()">Submit</button></div></div>
+</div>
+</main>
+
+<aside>
+<div class="card panel" style="margin-top:15px"><h2>📨 Today's Mail</h2><div class="letters" id="letters"></div></div>
+<div class="card panel" style="margin-top:15px"><h2>⌨️ Command Desk</h2><div class="deck" id="deck"></div></div>
+<div class="card panel" style="margin-top:15px"><h2>📚 Learning Path</h2><div class="lesson">Level 1: navigation<br>Level 2: files & directories<br>Level 3: searching<br>Level 4: permissions<br>Level 5: processes & pipes<br>Level 6: real-world Linux tasks</div></div>
+</aside>
+</div>
+</div>
+<div class="modal" id="modal"><div class="modalbox"><h2 id="mt"></h2><p id="mp"></p><button onclick="closeModal()">Continue</button></div></div>
+
+<script>
+const levels=[
+{name:"Level 1 — Morning Mail",letters:[
+{title:"Where are you?",task:"The postmaster asks for your current location. Enter the command that prints your working directory.",answers:["pwd"],ex:"pwd = print working directory.",hint:"Think: print + working + directory."},
+{title:"Check the mailroom",task:"Before receiving the next letter, list what's inside the mailroom.",answers:["ls"],ex:"ls lists files and directories.",hint:"Use the basic list command."},
+{title:"Enter the sorting room",task:"The next letter is in the sorting room. Change into the directory named sorting.",answers:["cd sorting"],ex:"cd changes your current directory.",hint:"Change directory to sorting."}]},
+{name:"Level 2 — Sorting Day",letters:[
+{title:"Read the address",task:"Read address.txt to discover where this letter must go.",answers:["cat address.txt"],ex:"cat prints a file's contents.",hint:"Print the contents of address.txt."},
+{title:"Create a delivery box",task:"Create a directory named delivered.",answers:["mkdir delivered"],ex:"mkdir creates a directory.",hint:"Make a directory called delivered."},
+{title:"Find the missing letter",task:"Search the current directory tree for a file ending in .txt.",answers:["find . -name '*.txt'","find . -name \"*.txt\""],ex:"find searches directories and -name filters filenames.",hint:"Use find from . and search for *.txt."}]},
+{name:"Level 3 — Special Delivery",letters:[
+{title:"Search the note",task:"The letter mentions an account named 'admin'. Search notes.txt for that word.",answers:["grep admin notes.txt"],ex:"grep searches text for matching patterns.",hint:"Use grep followed by admin and the filename."},
+{title:"Secure the package",task:"Only the owner should be able to read and write secret.txt.",answers:["chmod 600 secret.txt"],ex:"chmod changes file permissions. 600 gives the owner read/write access.",hint:"Use chmod 600 on secret.txt."}]},
+{name:"Level 4 — Night Route",letters:[
+{title:"Check running mail",task:"A delivery script may be stuck. Display running processes.",answers:["ps aux","ps -ef"],ex:"ps displays running processes.",hint:"Use ps with a detailed process listing."},
+{title:"Stop the stuck delivery",task:"The postmaster gives you PID 4242. Stop that process.",answers:["kill 4242"],ex:"kill sends a signal to a process.",hint:"Use kill followed by the PID."}]}
+];
+
+let s=JSON.parse(localStorage.getItem("postOfficeLinux"))||{l:0,i:0,xp:0,log:[],progress:[0,0,0,0]}; 
+if(!Array.isArray(s.progress)) s.progress=[0,0,0,0];
+function save(){localStorage.setItem("postOfficeLinux",JSON.stringify(s))}
+function current(){return levels[s.l]?.letters[s.i]}
+function render(){
+updateOfficeAppearance();
+let m=current(),total=levels.reduce((a,x)=>a+x.letters.length,0),completed=levels.slice(0,s.l).reduce((a,x)=>a+x.letters.length,0)+s.i;
+document.getElementById("lvl").textContent=s.l+1;document.getElementById("xp").textContent=s.xp;document.getElementById("done").textContent=completed;
+document.getElementById("bar").style.width=(s.i/(levels[s.l]?.letters.length||1)*100)+"%";
+const phaseTotal=levels[s.l]?.letters.length||1;
+const phaseDone=Math.min(s.progress[s.l]||s.i,phaseTotal);
+const phasePct=Math.round((phaseDone/phaseTotal)*100);
+document.getElementById("phaseFill").style.width=phasePct+"%";
+document.getElementById("phasePercent").textContent=phasePct+"% complete"+(phasePct>=100?" · PHASE UNLOCKED":"");
+for(let ni=0;ni<levels.length;ni++){
+  const node=document.getElementById("node"+(ni+1));
+  const unlocked=ni<=s.l || (s.progress[ni]||0)>0;
+  const current=ni===s.l;
+  node.classList.toggle("locked",!unlocked);
+  node.classList.toggle("current",current);
+  node.querySelector("small").textContent=ni<s.l?"✓ Level "+(ni+1):"Level "+(ni+1);
+}
+document.getElementById("levelTitle").textContent=levels[s.l]?levels[s.l].name:"All Mail Delivered!";
+const officeStates=[
+  ["Level 1 Post Office","Morning route · beginner mail"],
+  ["Level 2 Post Office","Busy sorting day · file deliveries"],
+  ["Level 3 Post Office","Special delivery · search & security"],
+  ["Level 4 Post Office","Night route · process incident"],
+  ["Linux Central Post Office","Final route · advanced operations"]
+];
+const os=officeStates[Math.min(s.l,officeStates.length-1)];
+document.getElementById("officeStatus").textContent=os[0];
+document.getElementById("officeDetail").textContent=os[1];
+document.getElementById("levelStamp").textContent=s.l<levels.length?"LEVEL "+(s.l+1):"COMPLETE";
+document.getElementById("missionLabel").textContent=m?`LETTER ${s.i+1}`:"ROUTE COMPLETE";
+document.getElementById("missionTitle").textContent=m?.title||"You are the Linux Post Office champion!";
+document.getElementById("missionText").textContent=m?.task||"Every letter has been unlocked and delivered. You can replay any completed level from the Learning Levels menu.";
+
+document.getElementById("levelButtons").innerHTML=levels.map((x,i)=>{
+  let unlocked=i<=s.l || (s.progress[i]||0)>0;
+  let count=Math.min(s.progress[i]||0,x.letters.length);
+  let completed=count>=x.letters.length;
+  return `<button class="${i===s.l?"active":""}" onclick="selectLevel(${i})" ${unlocked?"":"disabled"}>
+    ${completed?"✓ ":""}Level ${i+1} — ${x.name.split("—")[1].trim()} ${unlocked?"":"🔒"}
+    <small style="display:block;opacity:.75;margin-top:3px">${count}/${x.letters.length} letters</small>
+  </button>`;
+}).join("");
+
+document.getElementById("letters").innerHTML=levels[s.l]?levels[s.l].letters.map((x,i)=>{
+  let status=i<s.i?"Delivered":i===s.i?"Waiting for your Linux command":"Locked — complete the previous letter";
+  return `<div class="envelope ${i>s.i?"locked":""}" style="${i===s.i?"border-color:#4c9b6b;background:#f5fbf7":""}">
+    <span class="lock">${i<s.i?"✓":i===s.i?"📨":"🔒"}</span>
+    <b>${i+1}. ${x.title}</b><small>${status}</small>
+  </div>`;
+}).join(""):"";
+
+document.getElementById("deck").innerHTML=[["pwd","location"],["ls","list"],["cd","navigate"],["cat","read"],["mkdir","create"],["find","search"],["grep","text search"],["chmod","permissions"],["ps","processes"],["kill","stop process"]].map(x=>`<div class="cmd" onclick="fill('${x[0]}')"><code>${x[0]}</code><small>${x[1]}</small></div>`).join("");
+document.getElementById("out").innerHTML=s.log.map(x=>`<div class="${x.c||""}">${esc(x.t)}</div>`).join("");
+document.getElementById("out").scrollTop=99999;
+}
+function selectLevel(n){
+  if(n<0 || n>=levels.length)return;
+  // Every level that has been reached remains available forever.
+  // Keep each level's own letter progress so switching levels never loses progress.
+  const highestUnlocked=Math.max(s.l, ...s.progress.map((v,i)=>v>0?i:-1));
+  if(n>highestUnlocked)return;
+  s.l=n;
+  // Re-entering a completed level starts a fresh run so its 0→100% journey can be replayed.
+  if((s.progress[n]||0)>=levels[n].letters.length){
+    s.progress[n]=0;
+    s.i=0;
+    log("🔁 Replay started for Level "+(n+1)+". Complete every letter to reach 100% again.","yellow");
+  }else{
+    s.i=s.progress[n]||0;
+    log("📮 You opened Level "+(n+1)+". Your progress is saved.","yellow");
+  }
+  save();render();
+}
+
+
+function updateOfficeAppearance(){
+ const world=document.getElementById("world");
+ const level=Math.min(s.l,3);
+ const themes=[
+   ["#bfe0ef","#d9c6a2","🌤️"],
+   ["#b8d8e8","#d0b789","☁️"],
+   ["#24384a","#806e58","🌙"],
+   ["#111a27","#4d4b55","🌃"]
+ ];
+ const t=themes[level];
+ world.style.background=`linear-gradient(${t[0]} 0 46%,${t[1]} 46% 100%)`;
+ world.dataset.level=String(level+1);
+ document.querySelector(".c1").textContent=t[2];
+ document.querySelector(".c2").textContent=level>=2?"🌙":"☁";
+}
+
+function esc(x){return x.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function log(t,c=""){s.log.push({t,c});if(s.log.length>30)s.log.shift()}
+function setScene(scene){
+  const inside=document.getElementById("insideRoom"), dest=document.getElementById("destination");
+  inside.classList.toggle("show",scene==="inside"); dest.classList.toggle("show",scene==="destination");
+  document.getElementById("outsideBtn").classList.toggle("active",scene==="outside");
+  document.getElementById("insideBtn").classList.toggle("active",scene==="inside");
+  document.getElementById("talkBtn").classList.remove("active");
+  document.getElementById("deliverBtn").classList.toggle("active",scene==="destination");
+  const msg=document.getElementById("sceneMessage");
+  if(scene==="outside") msg.textContent="Click Enter Post Office, then talk to the postmaster.";
+  if(scene==="inside") msg.textContent="The postmaster is behind the counter. Talk to him to receive your letter.";
+  if(scene==="destination") msg.textContent="You reached the destination. Return to the counter for the next letter.";
+}
+function talkToPostmaster(){
+  if(!current()){log("🏆 The route is complete. The postmaster salutes you.","green");render();return}
+  setScene("inside");
+  const m=current();
+  log("💬 Postmaster: 'Good morning, postman. I have a letter for you.'","green");
+  document.getElementById("physicalLetterTitle").textContent="✉️ "+m.title;
+  document.getElementById("physicalLetterText").textContent=m.task;
+  document.getElementById("letterCard").classList.add("show");
+}
+function closePhysicalLetter(){document.getElementById("letterCard").classList.remove("show")}
+function walkToDestination(){
+  if(!current()){return}
+  setScene("destination");
+  document.getElementById("postman").style.left="68%";
+  log("🚚 You walk to the delivery destination.","yellow");
+  log("The letter is locked until you enter the correct Linux command.","dim");
+  render();
+}
+function run(){
+let m=current(),v=document.getElementById("cmd").value.trim();if(!v||!m)return;
+const normalizeCommand=x=>x.trim().replace(/\\s+/g," ").replace(/["']/g,'"');
+log("postman$ "+v);
+if(m.answers.some(a=>normalizeCommand(a)===normalizeCommand(v))){
+  log("✓ Linux command accepted. The letter opens!","green");log(m.ex,"green");s.xp+=50;
+  s.progress[s.l]=Math.max(s.progress[s.l]||0,s.i+1);
+  document.getElementById("letterCard").classList.remove("show");
+  document.getElementById("postman").style.left=(25+Math.random()*35)+"%";
+  s.i++;
+  const completedNow=s.progress[s.l]>=levels[s.l].letters.length;
+  if(completedNow){
+    s.progress[s.l]=levels[s.l].letters.length;
+    if(s.l<levels.length-1){
+      log("🎉 100% COMPLETE! Next phase unlocked!","green");
+      log("🚩 Walk to the new level on the adventure map.","yellow");
+      s.l++;s.i=s.progress[s.l]||0;
+    }else{
+      log("🏆 100% COMPLETE! ALL MAIL DELIVERED!","green");
+    }
+  }
+  setScene("outside");save();document.getElementById("cmd").value="";render();
+}else{
+  log("✗ The letter stays sealed. The command does not solve this delivery.","red");
+  log("Hint: "+m.hint,"yellow");
+  document.getElementById("cmd").value="";render();
+}
+}
+
+function fill(x){document.getElementById("cmd").value=x;document.getElementById("cmd").focus()}
+function openLetter(){
+  let m=current();if(!m)return;
+  document.getElementById("physicalLetterTitle").textContent="✉️ "+m.title;
+  document.getElementById("physicalLetterText").textContent=m.task;
+  document.getElementById("letterCard").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function reset(){s={l:0,i:0,xp:0,log:[{t:"📮 Welcome to Linux Post Office. The first letter is waiting."},{t:"Walk inside, talk to the postmaster, receive the physical letter, then solve it with Linux.","c":"yellow"}],progress:[0,0,0,0]};save();setScene("outside");render()}
+document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")run()});
+if(!s.log.length)reset();else render();
+</script>
+</body></html>
